@@ -2006,6 +2006,13 @@ $.kingdom.Kingdom = Class.create({
                 'Stability': 1,
                 'crime': 1
             },
+            'Post Office': {
+                'size': '1x1',
+                'cost': 28,
+                'Economy': 2,
+                'Stability': 2,
+                'onePerCity': true,
+            },
             'Sewer System': {
                 'size': 'district', // TODO per-district
                 'cost': 24,
