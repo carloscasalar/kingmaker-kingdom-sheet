@@ -5785,8 +5785,8 @@ $.kingdom.Calendar = Class.create({
         this.kingdom = kingdom;
         this.year = this.kingdom.getChoice('calendarYear', 633);
         this.month = this.kingdom.getChoice('calendarMonth', 8);
-        this.monthNames = this.kingdom.getArrayChoice('monthNames', [ 'Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec' ]);
-        this.seasons = this.kingdom.getArrayChoice('seasons', [ 'Zima 2', 'Zima 3', 'Jaro 1', 'Jaro 2', 'Jaro 3', 'Léto 1', 'Léto 2', 'Léto 3', 'Podzim 1', 'Podzim 2', 'Podzim 3', 'Zima 1' ]);
+        this.monthNames = this.kingdom.getArrayChoice('monthNames', ['Leden', 'Unor', 'Brezen', 'Duben', 'Kveten', 'Cerven', 'Cervenec', 'Srpen', 'Zari', 'Rijen', 'Listopad', 'Prosinec']);
+        this.seasons = this.kingdom.getArrayChoice('seasons', ['Zima 2', 'Zima 3', 'Jaro 1', 'Jaro 2', 'Jaro 3', 'Leto 1', 'Leto 2', 'Leto 3', 'Podzim 1', 'Podzim 2', 'Podzim 3', 'Zima 1']);
         $('.calendarMinus').click($.proxy(this.minus, this));
         $('.calendarPlus').click($.proxy(this.plus, this));
         this.refresh();
