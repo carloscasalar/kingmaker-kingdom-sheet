@@ -454,6 +454,7 @@ $.kingdom.Kingdom = Class.create({
         }, this));
         this.setupSelect('roads', 'size');
         this.setupSelect('farms', 'roads');
+        this.setupSelect('waterings', 'farms');
         // SelectAffect instances
         this.alignment = new $.kingdom.SelectAffect(this, 'Alignment', null, {
             'Lawful Good': {
@@ -634,6 +635,18 @@ $.kingdom.Kingdom = Class.create({
                 $('#improveHexOutput').append($('<div/>').text('Spent ' + cost + ' BPs to build new farm, new total is ' + newFarms));
             } else {
                 $('#improveHexOutput').append($('<div/>').text('Cannot have more farms than roads!').addClass('problem'));
+            }
+        }, this));
+        $('.buildWateringsButton').click($.proxy(function (evt) {
+            var cost = parseInt($(evt.target).attr('name'));
+            var farms = parseInt(this.getChoice('farms'));
+            var newWaterings = parseInt(this.getChoice('waterings')) + 1;
+            if (newWaterings <= farms) {
+                this.setChoice('waterings', newWaterings);
+                this.spendTreasury(cost);
+                $('#improveHexOutput').append($('<div/>').text('Spent ' + cost + ' BPs to build new waterings, new total is ' + newWaterings));
+            } else {
+                $('#improveHexOutput').append($('<div/>').text('Cannot have more waterings than farms!').addClass('problem'));
             }
         }, this));
         $('#improveCitiesButton').click($.proxy(function () {
@@ -910,6 +923,20 @@ $.kingdom.Kingdom = Class.create({
             farmsProduction = consumption;
         }
         this.modify("Consumption", -farmsProduction, "Farms");
+
+        $('[name="waterings"]').setSelect(farms);
+        if (waterings > farms) {
+            this.setChoice("waterings", farms);
+            waterings = farms;
+        }
+        var waterings = parseInt(this.getChoice("waterings", 0));
+        var wateringsProduction = waterings;
+        var consumption = this.get("Consumption");
+        if (wateringsProduction > consumption) {
+            this.set("Consumption_Actual", "(" + (wateringsProduction - consumption) + " waterings production surplus)");
+            wateringsProduction = consumption;
+        }
+        this.modify("Consumption", -wateringsProduction, "Waterings");
 
         this.limitsTable.refresh();
         if (this.get('limitBuildings') == 'no limit') {

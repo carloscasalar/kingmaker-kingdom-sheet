@@ -86,6 +86,11 @@
             </tr>
 
             <tr>
+                <th>Underground Watering System</th>
+                <td><select name="waterings"></select></td>
+            </tr>
+
+            <tr>
                 <th>Unrest</th>
                 <td><input type="text" name="unrest" value="0" size="1" /> (<span class="fromKingdom UnrestRate plusNumber"></span> each month)</td>
             </tr>
@@ -460,6 +465,11 @@
                                     Build farms (limit of <span class="fromKingdom limitFarmlands"></span> per month):
                                     <input type="button" value="plains (2 BP)" name="2" class="buildFarmButton" />
                                     <input type="button" value="hills (4 BP)" name="4" class="buildFarmButton" />
+                                </li>
+                                <li>
+                                    Build waterings (limit of <span class="fromKingdom limitFarmlands"></span> per month):
+                                    <input type="button" value="plains (2 BP)" name="2" class="buildWateringsButton" />
+                                    <input type="button" value="hills (4 BP)" name="4" class="buildWateringsButton" />
                                 </li>
                             </ul>
                             <div id="improveHexOutput" class="output"></div>
