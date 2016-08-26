@@ -5782,10 +5782,10 @@ $.kingdom.Calendar = Class.create({
 
     init: function (kingdom) {
         this.kingdom = kingdom;
-        this.year = this.kingdom.getChoice('calendarYear', 4712);
-        this.month = this.kingdom.getChoice('calendarMonth', 2);
-        this.monthNames = this.kingdom.getArrayChoice('monthNames', [ 'Abadius', 'Calistril', 'Pharast', 'Gozran', 'Desnus', 'Sarenith', 'Erastus', 'Arodus', 'Rova', 'Lamashan', 'Neth', 'Kuthona' ]);
-        this.seasons = this.kingdom.getArrayChoice('seasons', [ 'Winter 2', 'Winter 3', 'Spring 1', 'Spring 2', 'Spring 3', 'Summer 1', 'Summer 2', 'Summer 3', 'Autumn 1', 'Autumn 2', 'Autumn 3', 'Winter 1' ]);
+        this.year = this.kingdom.getChoice('calendarYear', 633);
+        this.month = this.kingdom.getChoice('calendarMonth', 8);
+        this.monthNames = this.kingdom.getArrayChoice('monthNames', [ 'Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec' ]);
+        this.seasons = this.kingdom.getArrayChoice('seasons', [ 'Zima 2', 'Zima 3', 'Jaro 1', 'Jaro 2', 'Jaro 3', 'Léto 1', 'Léto 2', 'Léto 3', 'Podzim 1', 'Podzim 2', 'Podzim 3', 'Zima 1' ]);
         $('.calendarMinus').click($.proxy(this.minus, this));
         $('.calendarPlus').click($.proxy(this.plus, this));
         this.refresh();
