@@ -1572,7 +1572,6 @@ $.kingdom.Kingdom = Class.create({
                 'size': '2x2',
                 'cost': 40,
                 'halveCost': ["Dance Hall", "Garrison", "Inn", "Stable", "Theater"],
-                'halveKingdom': 'Festivals',
                 'Stability': 4,
                 'onePerCity': true,
                 'Fame': 1, // TODO
