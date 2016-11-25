@@ -1,0 +1,26 @@
+{
+  "name": "kingmaker-kingdom-sheet",
+  "description": "A javascript-based interactive worksheet for kingdoms in the Pathfinder Kingmaker adventure path",
+  "main": "index.html",
+  "authors": [
+    "Rob Rendell",
+    "Petr Havelka <petr.havelka@web-entity.cz>",
+    "Carlos Castillo Alarcón <sir.ragnar@gmail.com>"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "pathfinder",
+    "kingmaker",
+    "Ultimate",
+    "Campaign"
+  ],
+  "homepage": "https://github.com/carloscasalar/kingmaker-kingdom-sheet",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
