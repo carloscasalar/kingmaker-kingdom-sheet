@@ -454,6 +454,7 @@ $.kingdom.Kingdom = Class.create({
         }, this));
         this.setupSelect('roads', 'size');
         this.setupSelect('farms', 'roads');
+        this.setupSelect('waterings', 'farms');
         // SelectAffect instances
         this.alignment = new $.kingdom.SelectAffect(this, 'Alignment', null, {
             'Lawful Good': {
@@ -557,7 +558,7 @@ $.kingdom.Kingdom = Class.create({
         this.peopleTable = new $.kingdom.PeopleTable(this);
         this.leaderTable = new $.kingdom.LeaderTable(this, this.peopleTable);
         this.resourceTable = new $.kingdom.ResourceTable(this);
-	this.armyTable = new $.kingdom.ArmyTable(this);
+  this.armyTable = new $.kingdom.ArmyTable(this);
         // load appropriate rules
         this.houseRulesBuildings();
         // load cities
@@ -634,6 +635,18 @@ $.kingdom.Kingdom = Class.create({
                 $('#improveHexOutput').append($('<div/>').text('Spent ' + cost + ' BPs to build new farm, new total is ' + newFarms));
             } else {
                 $('#improveHexOutput').append($('<div/>').text('Cannot have more farms than roads!').addClass('problem'));
+            }
+        }, this));
+        $('.buildWateringsButton').click($.proxy(function (evt) {
+            var cost = parseInt($(evt.target).attr('name'));
+            var farms = parseInt(this.getChoice('farms'));
+            var newWaterings = parseInt(this.getChoice('waterings')) + 1;
+            if (newWaterings <= farms) {
+                this.setChoice('waterings', newWaterings);
+                this.spendTreasury(cost);
+                $('#improveHexOutput').append($('<div/>').text('Spent ' + cost + ' BPs to build new waterings, new total is ' + newWaterings));
+            } else {
+                $('#improveHexOutput').append($('<div/>').text('Cannot have more waterings than farms!').addClass('problem'));
             }
         }, this));
         $('#improveCitiesButton').click($.proxy(function () {
@@ -911,6 +924,20 @@ $.kingdom.Kingdom = Class.create({
         }
         this.modify("Consumption", -farmsProduction, "Farms");
 
+        $('[name="waterings"]').setSelect(farms);
+        if (waterings > farms) {
+            this.setChoice("waterings", farms);
+            waterings = farms;
+        }
+        var waterings = parseInt(this.getChoice("waterings", 0));
+        var wateringsProduction = waterings;
+        var consumption = this.get("Consumption");
+        if (wateringsProduction > consumption) {
+            this.set("Consumption_Actual", "(" + (wateringsProduction - consumption) + " waterings production surplus)");
+            wateringsProduction = consumption;
+        }
+        this.modify("Consumption", -wateringsProduction, "Waterings");
+
         this.limitsTable.refresh();
         if (this.get('limitBuildings') == 'no limit') {
             this.set('limitBuildingsCurrent', 'no limit');
@@ -946,7 +973,7 @@ $.kingdom.Kingdom = Class.create({
         this.taxation.apply();
         this.festivals.apply();
 
-    	// armies
+      // armies
         this.armyTable.apply();
 
         // global factors
@@ -1545,7 +1572,6 @@ $.kingdom.Kingdom = Class.create({
                 'size': '2x2',
                 'cost': 40,
                 'halveCost': ["Dance Hall", "Garrison", "Inn", "Stable", "Theater"],
-                'halveKingdom': 'Festivals',
                 'Stability': 4,
                 'onePerCity': true,
                 'Fame': 1, // TODO
@@ -1979,6 +2005,13 @@ $.kingdom.Kingdom = Class.create({
                 'Economy': 1,
                 'Stability': 1,
                 'crime': 1
+            },
+            'Post Office': {
+                'size': '1x1',
+                'cost': 28,
+                'Economy': 2,
+                'Stability': 2,
+                'onePerCity': true,
             },
             'Sewer System': {
                 'size': 'district', // TODO per-district
@@ -2580,6 +2613,7 @@ $.kingdom.LeaderTable = Class.create({
         this.addLeader(tbody, 'Marshal', ['Dexterity', 'Wisdom'], ['Economy'], 'Economy -4', function () {
             this.kingdom.modify("Economy", -4, "Vacancies");
         });
+        this.addLeader(tbody, 'Royal Enforcer', ['Dexterity', 'Strength'], ['Loyalty'], 'No penalty', function () {});
         this.addLeader(tbody, 'Royal Assassin', ['Strength', 'Dexterity'], ['Loyalty'], 'No penalty, but Unrest rate -1 if role filled', function () {});
         this.addLeader(tbody, 'Spymaster', ['Dexterity', 'Intelligence'], ['Economy', 'Loyalty', 'Stability'], 'Economy -4, Unrest rate +1', function () {
             this.kingdom.modify("Economy", -4, "Vacancies");
@@ -2998,7 +3032,7 @@ $.kingdom.Ruin = Class.create({
     },
 
     getIsHouse: function () {
-	return false;
+  return false;
     },
 
     getNoAdjacentHouses: function () {
@@ -4340,7 +4374,7 @@ $.kingdom.CityBuilder = Class.create({
     close: function (evt) {
         $(document).unbind('click.buildMenu');
         this.menu.hide();
-    	$('#titleDiv').hide();
+      $('#titleDiv').hide();
         $(this.target).removeClass("buildingSite");
         this.district = null;
         if (evt) {
@@ -5626,9 +5660,9 @@ $.kingdom.Army = Class.create({
     },
 
     apply: function () {
-	var consumption = parseInt(this.stats['Consumption']) || 0;
-	if (this.stats['Active'] == "true")
-	    consumption *= 4;
+  var consumption = parseInt(this.stats['Consumption']) || 0;
+  if (this.stats['Active'] == "true")
+      consumption *= 4;
         this.kingdom.modify("Consumption", consumption, "Armies");
     },
 
@@ -5673,27 +5707,27 @@ $.kingdom.ArmyTable = Class.create({
 
     addCheckboxCell: function (row, value, changeCallback) {
         var cell = $('<td></td>');
-	var checkbox = $('<input type="checkbox"/>');
-	cell.append(checkbox);
-	checkbox.prop('checked', value == "true");
-	checkbox.change(changeCallback);
+  var checkbox = $('<input type="checkbox"/>');
+  cell.append(checkbox);
+  checkbox.prop('checked', value == "true");
+  checkbox.change(changeCallback);
         row.append(cell);
         return cell;
     },
 
     addSelectCell: function (row, text, options, editCallback) {
         var cell = $('<td></td>');
-	var select = $('<select></select>');
-	$.each(options, function (index, value) {
-	    var option = $('<option></option>');
-	    option.text(value);
-	    if (value == text) {
-		option.prop('selected', true);
-	    }
-	    select.append(option);
-	});
-	select.change(editCallback);
-	cell.append(select);
+  var select = $('<select></select>');
+  $.each(options, function (index, value) {
+      var option = $('<option></option>');
+      option.text(value);
+      if (value == text) {
+    option.prop('selected', true);
+      }
+      select.append(option);
+  });
+  select.change(editCallback);
+  cell.append(select);
         row.append(cell);
         return cell;
     },
@@ -5713,13 +5747,13 @@ $.kingdom.ArmyTable = Class.create({
         var newRow = $('<tr></tr>');
         var nameCell = this.addCell(newRow, army.name, $.proxy(this.finishEditingName, this));
         $.each(army.statList, $.proxy(function (index, stat) {
-	    if (stat == 'Active') {
-		this.addCheckboxCell(newRow, army.getStat(stat), $.proxy(this.finishEditingActive, this));
-	    } else if (stat == 'Size') {
-		this.addSelectCell(newRow, army.getStat(stat), [ 'Fine', 'Diminutive', 'Tiny', 'Small', 'Medium', 'Large', 'Huge', 'Gargantuan', 'Colossal' ], $.proxy(this.finishEditingSize, this));
-	    } else {
-		this.addCell(newRow, army.getStat(stat), $.proxy(this.finishEditingStat, this, stat));
-	    }
+      if (stat == 'Active') {
+    this.addCheckboxCell(newRow, army.getStat(stat), $.proxy(this.finishEditingActive, this));
+      } else if (stat == 'Size') {
+    this.addSelectCell(newRow, army.getStat(stat), [ 'Fine', 'Diminutive', 'Tiny', 'Small', 'Medium', 'Large', 'Huge', 'Gargantuan', 'Colossal' ], $.proxy(this.finishEditingSize, this));
+      } else {
+    this.addCell(newRow, army.getStat(stat), $.proxy(this.finishEditingStat, this, stat));
+      }
         }, this));
         this.armiesTable.append(newRow);
         this.kingdom.setChoice(this.armyCountId, this.armies.length);
@@ -5756,13 +5790,13 @@ $.kingdom.ArmyTable = Class.create({
     },
 
     finishEditingSize: function (evt) {
-	var element = $(evt.target);
+  var element = $(evt.target);
         var index = element.parent().parent().index();
         this.armies[index].setStat('Size', element.val());
     },
 
     finishEditingActive: function (evt) {
-	var checkbox = $(evt.target);
+  var checkbox = $(evt.target);
         var index = checkbox.parent().parent().index();
         this.armies[index].setStat('Active', checkbox.prop('checked') ? "true" : "false");
     },
@@ -5782,10 +5816,10 @@ $.kingdom.Calendar = Class.create({
 
     init: function (kingdom) {
         this.kingdom = kingdom;
-        this.year = this.kingdom.getChoice('calendarYear', 4712);
-        this.month = this.kingdom.getChoice('calendarMonth', 2);
-        this.monthNames = this.kingdom.getArrayChoice('monthNames', [ 'Abadius', 'Calistril', 'Pharast', 'Gozran', 'Desnus', 'Sarenith', 'Erastus', 'Arodus', 'Rova', 'Lamashan', 'Neth', 'Kuthona' ]);
-        this.seasons = this.kingdom.getArrayChoice('seasons', [ 'Winter 2', 'Winter 3', 'Spring 1', 'Spring 2', 'Spring 3', 'Summer 1', 'Summer 2', 'Summer 3', 'Autumn 1', 'Autumn 2', 'Autumn 3', 'Winter 1' ]);
+        this.year = this.kingdom.getChoice('calendarYear', 633);
+        this.month = this.kingdom.getChoice('calendarMonth', 8);
+        this.monthNames = this.kingdom.getArrayChoice('monthNames', ['Leden', 'Unor', 'Brezen', 'Duben', 'Kveten', 'Cerven', 'Cervenec', 'Srpen', 'Zari', 'Rijen', 'Listopad', 'Prosinec']);
+        this.seasons = this.kingdom.getArrayChoice('seasons', ['Zima 2', 'Zima 3', 'Jaro 1', 'Jaro 2', 'Jaro 3', 'Leto 1', 'Leto 2', 'Leto 3', 'Podzim 1', 'Podzim 2', 'Podzim 3', 'Zima 1']);
         $('.calendarMinus').click($.proxy(this.minus, this));
         $('.calendarPlus').click($.proxy(this.plus, this));
         this.refresh();
