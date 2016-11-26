@@ -1,5 +1,7 @@
 notes.txt
 *.swp
 *.iml
+*.log
 .idea
 src/lib
+node_modules

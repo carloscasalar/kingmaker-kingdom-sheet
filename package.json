@@ -2,9 +2,11 @@
   "name": "kingmaker-kingdom-sheet",
   "version": "1.0.0",
   "description": "A javascript-based interactive worksheet for kingdoms in the Pathfinder Kingmaker adventure path",
-  "main": "index.html",
+  "main": "src/index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "bower install",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "browser-sync start --server 'src' --files 'src'"
   },
   "repository": {
     "type": "git",
@@ -17,13 +19,16 @@
     "Campaign"
   ],
   "contributors": [
-      "Rob Rendell",
-      "Petr Havelka <petr.havelka@web-entity.cz>",
-      "Carlos Castillo Alarcón <sir.ragnar@gmail.com>"
+    "Rob Rendell",
+    "Petr Havelka <petr.havelka@web-entity.cz>",
+    "Carlos Castillo Alarcón <sir.ragnar@gmail.com>"
   ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/carloscasalar/kingmaker-kingdom-sheet/issues"
   },
-  "homepage": "https://github.com/carloscasalar/kingmaker-kingdom-sheet#readme"
+  "homepage": "https://github.com/carloscasalar/kingmaker-kingdom-sheet#readme",
+  "devDependencies": {
+    "browser-sync": "^2.18.2"
+  }
 }

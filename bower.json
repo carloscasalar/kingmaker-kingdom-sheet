@@ -1,7 +1,7 @@
 {
   "name": "kingmaker-kingdom-sheet",
   "description": "A javascript-based interactive worksheet for kingdoms in the Pathfinder Kingmaker adventure path",
-  "main": "index.html",
+  "main": "src/index.html",
   "authors": [
     "Rob Rendell",
     "Petr Havelka <petr.havelka@web-entity.cz>",
@@ -22,5 +22,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "jquery": "1.7.2"
+  }
 }

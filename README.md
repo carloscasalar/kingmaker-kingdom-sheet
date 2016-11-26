@@ -5,3 +5,16 @@ A javascript-based interactive worksheet for kingdoms in the Pathfinder Kingmake
 
 I've done all my development using Google Chrome.  If it works in any other browser, that's presumably thanks to jquery, and an added bonus.  We only need it to run in Chrome for our campaign.
 
+
+## Install
+
+You need to install node (maybe through [nvm](https://github.com/creationix/nvm)) and bower with _-g_ (global) option.
+
+```
+nvm use
+npm install
+```
+
+## Run
+
+You can run the application with `npm start`
