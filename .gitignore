@@ -2,3 +2,4 @@ notes.txt
 *.swp
 *.iml
 .idea
+src/lib
